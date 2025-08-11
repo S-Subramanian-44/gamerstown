@@ -344,7 +344,7 @@ window.GAMERSTOWN.createCityCard = (city) => {
     Delhi: "/images/cafe3-1.png",
     Hyderabad: "/images/cafe4-1.png",
     Chennai: "/images/cafe5-1.png",
-    Pune: "/images/cafe6-1.png",
+    Coimbatore: "/images/cafe6-1.png",
   }
 
   const imageUrl = cityImages[city] || "/placeholder.svg?height=48&width=48&text=City+Image"

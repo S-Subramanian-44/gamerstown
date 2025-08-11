@@ -29,33 +29,66 @@
     <!-- Navigation -->
     <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <h1 class="text-white text-2xl font-gaming font-bold">
-                        🎮 GAMERSTOWN
-                    </h1>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
-                        <a href="explore.html" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Explore</a>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4" id="authButtons">
-                    <a href="login.html" class="text-white border border-white px-4 py-2 rounded-lg hover:bg-white hover:text-primary transition-all">Login</a>
-                    <a href="register.html" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-100 transition-all font-medium">Sign Up</a>
-                </div>
-                <div class="hidden items-center space-x-4" id="userMenu">
-                    <span class="text-white" id="userName"></span>
-                    <div class="relative">
-                        <button class="text-white hover:text-gray-300" id="userDropdown" onclick="window.location.href='user-dashboard.html'">
-                            <i class="fas fa-user-circle text-2xl"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+    <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <div class="flex items-center">
+            <h1 class="text-white text-2xl font-gaming font-bold">
+                🎮 GAMERSTOWN
+            </h1>
         </div>
+
+        <!-- Desktop Links -->
+        <div class="hidden md:flex items-center space-x-4">
+            <a href="#" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+            <a href="explore.html" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Explore</a>
+        </div>
+
+        <!-- Auth Buttons (Desktop) -->
+        <div class="hidden md:flex items-center space-x-4" id="authButtons">
+            <a href="login.html" class="text-white border border-white px-4 py-2 rounded-lg hover:bg-white hover:text-primary transition-all">Login</a>
+            <a href="register.html" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-100 transition-all font-medium">Sign Up</a>
+        </div>
+
+        <!-- User Menu (Desktop) -->
+        <div class="hidden md:flex items-center space-x-4" id="userMenu">
+            <span class="text-white" id="userName"></span>
+            <button class="text-white hover:text-gray-300" id="userDropdown" onclick="window.location.href='user-dashboard.html'">
+                <i class="fas fa-user-circle text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden flex items-center">
+            <button id="mobileMenuButton" class="text-white focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Content -->
+    <div id="mobileMenu" class="hidden flex-col space-y-2 mt-4 md:hidden">
+        <a href="#" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10">Home</a>
+        <a href="explore.html" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-white/10">Explore</a>
+        <div id="authButtonsMobile" class="flex flex-col space-y-2">
+            <a href="login.html" class="text-white border border-white px-4 py-2 rounded-lg hover:bg-white hover:text-primary transition-all text-center">Login</a>
+            <a href="register.html" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-100 transition-all font-medium text-center">Sign Up</a>
+        </div>
+        <div id="userMenuMobile" class="hidden items-center space-x-2">
+            <span class="text-white" id="userNameMobile"></span>
+            <button class="text-white hover:text-gray-300" onclick="window.location.href='user-dashboard.html'">
+                <i class="fas fa-user-circle text-2xl"></i>
+            </button>
+        </div>
+    </div>
+</div>
     </nav>
+
+<script>
+    // Toggle mobile menu
+    document.getElementById('mobileMenuButton').addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+</script>
 
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-accent via-primary to-secondary min-h-screen flex items-center">
@@ -230,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load cities for dropdown
 async function loadCities() {
     const citySelect = document.getElementById('citySelect');
-    const cities = ['Bangalore', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Pune'];
+    const cities = ['Bangalore', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Coimbatore'];
     
     cities.forEach(city => {
         const option = document.createElement('option');

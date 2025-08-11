@@ -81,7 +81,7 @@ const cafes = [
   {
     name: "Next Level Lounge",
     address: "333 Future St",
-    city: "Pune",
+    city: "Coimbatore",
     description: "Modern and vibrant cafe, ideal for both casual and serious gamers.",
     hourlyRate: 160,
     images: ["/images/cafe6-1.png", "/images/cafe6-2.png", "/images/cafe6-3.png", "/images/cafe6-4.png"],
