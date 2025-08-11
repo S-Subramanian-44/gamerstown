@@ -327,7 +327,7 @@
                     document.getElementById('userNameHeader').textContent = user.username || user.email.split('@')[0];
                     
                     // Load wallet balance from localStorage or API
-                    userWalletBalance = parseInt(localStorage.getItem('walletBalance')) || user.walletBalance || 2500;
+                    userWalletBalance = parseInt(localStorage.getItem('walletBalance')) || user.walletBalance || 0;
                     document.getElementById('walletBalance').textContent = `₹${userWalletBalance.toLocaleString()}`;
                 }
 
