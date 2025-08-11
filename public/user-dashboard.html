@@ -346,38 +346,48 @@
             }
         }
 
-        async function loadBookings() {
-            try {
-                // Load bookings from localStorage or API
-                const savedBookings = localStorage.getItem('userBookings');
-                if (savedBookings) {
-                    userBookings = JSON.parse(savedBookings);
-                } else {
-                    // Mock booking data
-                    userBookings = [
-                        {
-                            _id: '1',
-                            cafeName: 'Gaming Zone Pro',
-                            cafeAddress: 'MG Road, Bangalore',
-                            date: '2024-12-25',
-                            slot: '14:00-15:00',
-                            numberOfPlayers: 2,
-                            totalAmount: 300,
-                            status: 'upcoming',
-                            paymentStatus: 'paid',
-                            bookingTime: '2024-12-20T10:30:00Z',
-                            specialRequests: 'Window seat preferred'
-                        }
-                    ];
+async function loadBookings() {
+    try {
+        // Load bookings from localStorage or API
+        const savedBookings = localStorage.getItem('userBookings');
+        if (savedBookings) {
+            userBookings = JSON.parse(savedBookings);
+        } else {
+            // Mock booking data
+            userBookings = [
+                {
+                    _id: '1',
+                    cafeName: 'Gaming Zone Pro',
+                    cafeAddress: 'MG Road, Bangalore',
+                    date: '2024-12-25',
+                    slot: '14:00-15:00',
+                    numberOfPlayers: 2,
+                    totalAmount: 300,
+                    status: 'upcoming',
+                    paymentStatus: 'paid',
+                    bookingTime: '2024-12-20T10:30:00Z',
+                    specialRequests: 'Window seat preferred'
                 }
-
-                displayBookings();
-                loadRecentActivity();
-            } catch (error) {
-                console.error('Error loading bookings:', error);
-                showError('Failed to load bookings');
-            }
+            ];
         }
+
+        // ✅ Update booking stats after loading
+        const stats = {
+            totalBookings: userBookings.length,
+            upcomingBookings: userBookings.filter(b => b.status === 'upcoming' || b.status === 'confirmed').length,
+            completedBookings: userBookings.filter(b => b.status === 'completed').length
+        };
+        document.getElementById('totalBookings').textContent = stats.totalBookings;
+        document.getElementById('upcomingBookings').textContent = stats.upcomingBookings;
+        document.getElementById('completedBookings').textContent = stats.completedBookings;
+
+        displayBookings();
+        loadRecentActivity();
+    } catch (error) {
+        console.error('Error loading bookings:', error);
+        showError('Failed to load bookings');
+    }
+}
 
         function loadRecentActivity() {
             const activityContent = document.getElementById('activityContent');
