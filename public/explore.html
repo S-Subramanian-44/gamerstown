@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Gaming Cafés - GAMERSTOWN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#667eea',
+                        secondary: '#764ba2',
+                        accent: '#f093fb',
+                        dark: '#1a202c',
+                    },
+                    fontFamily: {
+                        'gaming': ['Orbitron', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-white text-2xl font-gaming font-bold">
+                        🎮 GAMERSTOWN
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+                        <a href="#" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Explore</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4" id="authButtons">
+                    <a href="login.html" class="text-white border border-white px-4 py-2 rounded-lg hover:bg-white hover:text-primary transition-all">Login</a>
+                    <a href="register.html" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-100 transition-all font-medium">Sign Up</a>
+                </div>
+                <div class="hidden items-center space-x-4" id="userMenu">
+                    <span class="text-white" id="userName"></span>
+                    <div class="relative">
+                        <button class="text-white hover:text-gray-300" id="userDropdown" onclick="window.location.href='user-dashboard.html'">
+                            <i class="fas fa-user-circle text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Search and Filters -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="relative">
+                    <i class="fas fa-map-marker-alt absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <select id="cityFilter" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                        <option value="">All Cities</option>
+                    </select>
+                </div>
+                <div class="relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="searchInput" placeholder="Search cafés..." 
+                           class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                </div>
+                <div class="relative">
+                    <i class="fas fa-rupee-sign absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <select id="priceFilter" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                        <option value="">All Prices</option>
+                        <option value="0-100">Under ₹100/hr</option>
+                        <option value="100-200">₹100-200/hr</option>
+                        <option value="200-300">₹200-300/hr</option>
+                        <option value="300+">Above ₹300/hr</option>
+                    </select>
+                </div>
+                <button onclick="applyFilters()" class="bg-primary hover:bg-secondary text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    <i class="fas fa-filter mr-2"></i>Filter
+                </button>
+            </div>
+        </div>
+
+        <!-- Cafés Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cafesGrid">
+            <!-- Cafés will be loaded dynamically -->
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p class="text-gray-600">Loading gaming cafés...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="text-center py-12 hidden">
+            <i class="fas fa-search text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-600 mb-2">No cafés found</h3>
+            <p class="text-gray-500">Try adjusting your search criteria</p>
+        </div>
+    </main>
+<br>
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-2xl font-gaming font-bold mb-4">🎮 GAMERSTOWN</h3>
+                    <p class="text-gray-400 mb-6">Your ultimate destination for gaming café bookings. Find, book, and play at the best gaming spots in your city.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-primary hover:bg-secondary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-primary hover:bg-secondary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="bg-primary hover:bg-secondary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="explore.html" class="text-gray-400 hover:text-white transition-colors">Explore Cafés</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-white transition-colors">Sign Up</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-white transition-colors">Login</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="help-center.html" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="contact-us.html" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="terms-of-service.html" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 GAMERSTOWN. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let allCafes = [];
+        let filteredCafes = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            updateNavigation();
+            await loadCities();
+            await loadCafes();
+            setupFilters();
+        });
+
+        async function loadCities() {
+            try {
+                const cities = ['Bangalore', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Pune'];
+                const cityFilter = document.getElementById('cityFilter');
+                
+                cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.toLowerCase();
+                    option.textContent = city;
+                    cityFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading cities:', error);
+            }
+        }
+
+        async function loadCafes() {
+            try {
+                // Enhanced mock café data with proper images
+                allCafes = [
+                    {
+                        _id: '1',
+                        name: 'Gaming Zone Pro',
+                        city: 'bangalore',
+                        address: 'MG Road, Bangalore',
+                        hourlyRate: 150,
+                        averageRating: 4.5,
+                        totalReviews: 120,
+                        amenities: ['High-end PCs', 'PS5', 'Xbox', 'VR'],
+                        games: ['Valorant', 'CS:GO', 'Dota 2', 'Apex Legends'],
+                        image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        isOpen: true,
+                        description: 'Premium gaming experience with latest hardware',
+                        openingTime: '10:00',
+                        closingTime: '23:00',
+                        phone: '+91 9876543210'
+                    },
+                    {
+                        _id: '2',
+                        name: 'Cyber Arena',
+                        city: 'mumbai',
+                        address: 'Bandra West, Mumbai',
+                        hourlyRate: 200,
+                        averageRating: 4.3,
+                        totalReviews: 89,
+                        amenities: ['Gaming PCs', 'PS4', 'Nintendo Switch', 'Food Court'],
+                        games: ['League of Legends', 'Overwatch', 'PUBG', 'Fortnite'],
+                        image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        isOpen: true,
+                        description: 'Esports focused gaming café with tournament facilities',
+                        openingTime: '09:00',
+                        closingTime: '00:00',
+                        phone: '+91 9876543211'
+                    },
+                    {
+                        _id: '3',
+                        name: 'Elite Gaming Hub',
+                        city: 'delhi',
+                        address: 'Connaught Place, Delhi',
+                        hourlyRate: 180,
+                        averageRating: 4.7,
+                        totalReviews: 156,
+                        amenities: ['RTX 4080 PCs', 'PS5', 'Xbox Series X', 'VR Headsets'],
+                        games: ['Cyberpunk 2077', 'Elden Ring', 'God of War', 'Red Dead Redemption 2'],
+                        image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                        isOpen: true,
+                        description: 'Luxury gaming lounge with premium setups',
+                        openingTime: '11:00',
+                        closingTime: '01:00',
+                        phone: '+91 9876543212'
+                    },
+                    {
+                        _id: '4',
+                        name: 'Game Nexus',
+                        city: 'hyderabad',
+                        address: 'HITEC City, Hyderabad',
+                        hourlyRate: 120,
+                        averageRating: 4.2,
+                        totalReviews: 95,
+                        amenities: ['Gaming PCs', 'Consoles', 'Snacks', 'WiFi'],
+                        games: ['Minecraft', 'Among Us', 'Rocket League', 'Fall Guys'],
+                        image: '/images/Nexus.jpeg',
+                        isOpen: false,
+                        description: 'Community gaming space for casual players',
+                        openingTime: '10:00',
+                        closingTime: '22:00',
+                        phone: '+91 9876543213'
+                    },
+                    {
+                        _id: '5',
+                        name: 'Arcade Alley',
+                        city: 'chennai',
+                        address: 'T. Nagar, Chennai',
+                        hourlyRate: 100,
+                        averageRating: 4.0,
+                        totalReviews: 78,
+                        amenities: ['Arcade Machines', 'Retro Games', 'Snack Bar'],
+                        games: ['Street Fighter', 'Mortal Kombat', 'Pac-Man', 'Tekken'],
+                        image: '/images/arcade-alley.jpg',
+                        isOpen: true,
+                        description: 'Retro gaming paradise with classic arcade games',
+                        openingTime: '09:00',
+                        closingTime: '23:00',
+                        phone: '+91 9876543214'
+                    },
+                    {
+                        _id: '6',
+                        name: 'Next Level Lounge',
+                        city: 'pune',
+                        address: 'Koregaon Park, Pune',
+                        hourlyRate: 160,
+                        averageRating: 4.6,
+                        totalReviews: 112,
+                        amenities: ['Latest Consoles', 'Comfortable Seating', 'Energy Drinks'],
+                        games: ['FIFA 24', 'NBA 2K', 'Call of Duty', 'Forza Horizon'],
+                        image: '/images/next-level-lounge.jpg',
+                        isOpen: true,
+                        description: 'Modern gaming lounge with latest titles',
+                        openingTime: '10:00',
+                        closingTime: '00:00',
+                        phone: '+91 9876543215'
+                    }
+                ];
+
+                filteredCafes = [...allCafes];
+                displayCafes();
+            } catch (error) {
+                console.error('Error loading cafés:', error);
+                showError('Failed to load cafés');
+            }
+        }
+
+        function displayCafes() {
+            const cafesGrid = document.getElementById('cafesGrid');
+            const loadingState = document.getElementById('loadingState');
+            const emptyState = document.getElementById('emptyState');
+
+            loadingState.style.display = 'none';
+
+            if (filteredCafes.length === 0) {
+                cafesGrid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            cafesGrid.innerHTML = '';
+
+            filteredCafes.forEach(cafe => {
+                const cafeCard = createCafeCard(cafe);
+                cafesGrid.appendChild(cafeCard);
+            });
+        }
+
+        function createCafeCard(cafe) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-2';
+
+            const statusBadge = cafe.isOpen 
+                ? '<span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Open</span>'
+                : '<span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Closed</span>';
+
+            card.innerHTML = `
+        <div class="relative">
+            <img src="${cafe.image}" alt="${cafe.name}" class="w-full h-48 object-cover">
+            <div class="absolute top-4 right-4">
+                ${statusBadge}
+            </div>
+        </div>
+        <div class="p-6">
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="text-xl font-bold text-gray-900">${cafe.name}</h3>
+                <div class="flex items-center">
+                    <i class="fas fa-star text-yellow-400 mr-1"></i>
+                    <span class="text-sm font-medium">${cafe.averageRating}</span>
+                    <span class="text-sm text-gray-500 ml-1">(${cafe.totalReviews})</span>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-4">
+                <i class="fas fa-map-marker-alt mr-2"></i>${cafe.address}
+            </p>
+            <div class="flex flex-wrap gap-2 mb-4">
+                ${cafe.amenities.slice(0, 3).map(amenity => 
+                    `<span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">${amenity}</span>`
+                ).join('')}
+                ${cafe.amenities.length > 3 ? `<span class="text-xs text-gray-500">+${cafe.amenities.length - 3} more</span>` : ''}
+            </div>
+            <div class="flex justify-between items-center">
+                <div>
+                    <span class="text-2xl font-bold text-primary">₹${cafe.hourlyRate}</span>
+                    <span class="text-gray-500">/hour</span>
+                </div>
+                <button onclick="viewCafe('${cafe._id}')" class="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-lg font-medium transition-colors ${!cafe.isOpen ? 'opacity-50 cursor-not-allowed' : ''}" ${!cafe.isOpen ? 'disabled' : ''}>
+                    ${cafe.isOpen ? 'Book Now' : 'Closed'}
+                </button>
+            </div>
+        </div>
+    `;
+
+            return card;
+        }
+
+        function setupFilters() {
+            const searchInput = document.getElementById('searchInput');
+            const cityFilter = document.getElementById('cityFilter');
+            const priceFilter = document.getElementById('priceFilter');
+
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const cityParam = urlParams.get('city');
+            const searchParam = urlParams.get('search');
+
+            if (cityParam) {
+                cityFilter.value = cityParam;
+            }
+            if (searchParam) {
+                searchInput.value = searchParam;
+            }
+
+            // Apply initial filters if any
+            if (cityParam || searchParam) {
+                applyFilters();
+            }
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cityFilter = document.getElementById('cityFilter').value;
+            const priceFilter = document.getElementById('priceFilter').value;
+
+            filteredCafes = allCafes.filter(cafe => {
+                const matchesSearch = !searchTerm || 
+                    cafe.name.toLowerCase().includes(searchTerm) ||
+                    cafe.address.toLowerCase().includes(searchTerm);
+
+                const matchesCity = !cityFilter || cafe.city === cityFilter;
+
+                let matchesPrice = true;
+                if (priceFilter) {
+                    const price = cafe.hourlyRate;
+                    switch (priceFilter) {
+                        case '0-100':
+                            matchesPrice = price < 100;
+                            break;
+                        case '100-200':
+                            matchesPrice = price >= 100 && price <= 200;
+                            break;
+                        case '200-300':
+                            matchesPrice = price >= 200 && price <= 300;
+                            break;
+                        case '300+':
+                            matchesPrice = price > 300;
+                            break;
+                    }
+                }
+
+                return matchesSearch && matchesCity && matchesPrice;
+            });
+
+            displayCafes();
+        }
+
+        function viewCafe(cafeId) {
+            window.location.href = `venue.html?id=${cafeId}`;
+        }
+
+        // Real-time search
+        document.getElementById('searchInput').addEventListener('input', debounce(applyFilters, 300));
+        document.getElementById('cityFilter').addEventListener('change', applyFilters);
+        document.getElementById('priceFilter').addEventListener('change', applyFilters);
+
+        function updateNavigation() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userName = document.getElementById('userName');
+
+            if (token && user) {
+                const userData = JSON.parse(user);
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'flex';
+                userName.textContent = userData.username || userData.email;
+            } else {
+                authButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+            }
+        }
+
+        function showError(message) {
+            alert(message);
+        }
+    </script>
+</body>
+</html>

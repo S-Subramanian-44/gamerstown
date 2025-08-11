@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - GAMERSTOWN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#667eea',
+                        secondary: '#764ba2',
+                        accent: '#f093fb',
+                        dark: '#1a202c',
+                    },
+                    fontFamily: {
+                        'gaming': ['Orbitron', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-white text-2xl font-gaming font-bold">
+                        🎮 GAMERSTOWN
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+                        <a href="explore.html" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Explore</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4" id="authButtons">
+                    <a href="login.html" class="text-white border border-white px-4 py-2 rounded-lg hover:bg-white hover:text-primary transition-all">Login</a>
+                    <a href="register.html" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-100 transition-all font-medium">Sign Up</a>
+                </div>
+                <div class="hidden items-center space-x-4" id="userMenu">
+                    <span class="text-white" id="userName"></span>
+                    <div class="relative">
+                        <button class="text-white hover:text-gray-300" id="userDropdown" onclick="window.location.href='user-dashboard.html'">
+                            <i class="fas fa-user-circle text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-gaming font-bold text-gray-900 mb-4">Help Center</h1>
+            <p class="text-xl text-gray-600">Get help and submit feedback to improve your gaming experience</p>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+            
+            <div class="space-y-6">
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">How do I book a gaming slot?</h3>
+                    <p class="text-gray-600">Simply browse our cafés, select your preferred location, choose a date and time slot, and complete the payment through your wallet or preferred payment method.</p>
+                </div>
+                
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">What is the cancellation policy?</h3>
+                    <p class="text-gray-600">You can cancel your booking for free up to 2 hours before your slot. Cancellations between 1-2 hours incur a 50% charge, and cancellations within 1 hour are non-refundable.</p>
+                </div>
+                
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">How do I add money to my wallet?</h3>
+                    <p class="text-gray-600">Go to your dashboard and click on "Add Money" in the wallet section. You can add funds using various payment methods including UPI, cards, and net banking.</p>
+                </div>
+                
+                <div class="border-b border-gray-200 pb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Can I modify my booking?</h3>
+                    <p class="text-gray-600">Currently, you cannot modify bookings directly. Please cancel your existing booking and create a new one for your preferred slot.</p>
+                </div>
+                
+                <div class="pb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">What if I face technical issues during my gaming session?</h3>
+                    <p class="text-gray-600">Contact the café staff immediately for technical support. If the issue cannot be resolved, you may be eligible for a partial refund or free extension.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Form -->
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Submit Feedback</h2>
+            <p class="text-gray-600 mb-6">Help us improve GAMERSTOWN by sharing your feedback, suggestions, or reporting issues.</p>
+            
+            <form id="feedbackForm" class="space-y-6">
+                <div>
+                    <label for="feedbackType" class="block text-sm font-medium text-gray-700 mb-2">Feedback Type</label>
+                    <select id="feedbackType" name="feedbackType" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                        <option value="">Select feedback type</option>
+                        <option value="suggestion">Suggestion</option>
+                        <option value="bug_report">Bug Report</option>
+                        <option value="feature_request">Feature Request</option>
+                        <option value="complaint">Complaint</option>
+                        <option value="compliment">Compliment</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="subject" class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                    <input type="text" id="subject" name="subject" required 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
+                           placeholder="Brief description of your feedback">
+                </div>
+
+                <div>
+                    <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                    <textarea id="message" name="message" rows="6" required
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
+                              placeholder="Please provide detailed feedback..."></textarea>
+                </div>
+
+                <div>
+                    <label for="priority" class="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+                    <select id="priority" name="priority" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-medium hover:shadow-lg transition-all transform hover:scale-105">
+                    <i class="fas fa-paper-plane mr-2"></i>Submit Feedback
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-16 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-2xl font-gaming font-bold mb-4">🎮 GAMERSTOWN</h3>
+                    <p class="text-gray-400 mb-6">Your ultimate destination for gaming café bookings.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="explore.html" class="text-gray-400 hover:text-white transition-colors">Explore Cafés</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-white transition-colors">Sign Up</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-white transition-colors">Login</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="help-center.html" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="contact-us.html" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="terms-of-service.html" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 GAMERSTOWN. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Update navigation
+        function updateNavigation() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            const authButtons = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userName = document.getElementById('userName');
+
+            if (token && user) {
+                const userData = JSON.parse(user);
+                authButtons.style.display = 'none';
+                userMenu.style.display = 'flex';
+                userName.textContent = userData.username || userData.email.split('@')[0];
+            } else {
+                authButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+            }
+        }
+
+        // Handle feedback form submission
+        document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please login to submit feedback');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const formData = new FormData(e.target);
+            const feedbackData = {
+                feedbackType: formData.get('feedbackType'),
+                subject: formData.get('subject'),
+                message: formData.get('message'),
+                priority: formData.get('priority')
+            };
+
+            try {
+                // Mock API call - replace with actual endpoint
+                console.log('Submitting feedback:', feedbackData);
+                
+                // Simulate success
+                alert('Thank you for your feedback! We will review it and get back to you soon.');
+                e.target.reset();
+                
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                alert('Failed to submit feedback. Please try again.');
+            }
+        });
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNavigation();
+        });
+    </script>
+</body>
+</html>

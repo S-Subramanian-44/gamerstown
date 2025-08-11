@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - GAMERSTOWN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#667eea',
+                        secondary: '#764ba2',
+                        accent: '#f093fb',
+                        dark: '#1a202c',
+                    },
+                    fontFamily: {
+                        'gaming': ['Orbitron', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-white text-2xl font-gaming font-bold">
+                        🎮 GAMERSTOWN
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="index.html" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+                        <a href="explore.html" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Explore</a>
+                    </div>
+                </div>
+                <div class="hidden items-center space-x-4" id="userMenu">
+                    <span class="text-white" id="userName"></span>
+                    <div class="relative">
+                        <button class="text-white hover:text-gray-300" id="userDropdown" onclick="window.location.href='user-dashboard.html'">
+                            <i class="fas fa-user-circle text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-gaming font-bold text-gray-900 mb-2">
+            Welcome back, <span id="userNameHeader">Gamer</span>!
+            </h1>
+            <p class="text-gray-600">Manage your bookings and wallet from your dashboard</p>
+        </div>
+
+        <!-- Logout Button -->
+        <button
+            onclick="GAMERSTOWN.auth.logout()"
+            class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg font-semibold transition-all duration-200"
+        >
+            Logout
+        </button>
+        </div>
+
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100 text-sm">Wallet Balance</p>
+                        <p class="text-3xl font-bold" id="walletBalance">₹0</p>
+                    </div>
+                    <div class="bg-white/20 rounded-full p-3">
+                        <i class="fas fa-wallet text-2xl"></i>
+                    </div>
+                </div>
+                <button onclick="openRechargeModal()" class="mt-4 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Add Money
+                </button>
+            </div>
+
+            <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-100 text-sm">Total Bookings</p>
+                        <p class="text-3xl font-bold" id="totalBookings">0</p>
+                    </div>
+                    <div class="bg-white/20 rounded-full p-3">
+                        <i class="fas fa-calendar-check text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-100 text-sm">Upcoming Sessions</p>
+                        <p class="text-3xl font-bold" id="upcomingBookings">0</p>
+                    </div>
+                    <div class="bg-white/20 rounded-full p-3">
+                        <i class="fas fa-clock text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-yellow-500 to-orange-500 text-white rounded-2xl p-6 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-yellow-100 text-sm">Completed Sessions</p>
+                        <p class="text-3xl font-bold" id="completedBookings">0</p>
+                    </div>
+                    <div class="bg-white/20 rounded-full p-3">
+                        <i class="fas fa-trophy text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Section -->
+        <div class="bg-white rounded-2xl shadow-lg mb-8">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h3 class="text-xl font-semibold text-gray-900">My Bookings</h3>
+                <a href="explore.html" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-lg transition-colors">
+                    <i class="fas fa-plus mr-2"></i>New Booking
+                </a>
+            </div>
+            
+            <!-- Booking Tabs -->
+            <div class="border-b">
+                <nav class="flex space-x-8 px-6">
+                    <button class="booking-tab py-4 px-1 border-b-2 font-medium text-sm active" data-tab="upcoming">
+                        Upcoming
+                    </button>
+                    <button class="booking-tab py-4 px-1 border-b-2 font-medium text-sm" data-tab="completed">
+                        Completed
+                    </button>
+                    <button class="booking-tab py-4 px-1 border-b-2 font-medium text-sm" data-tab="cancelled">
+                        Cancelled
+                    </button>
+                </nav>
+            </div>
+            
+            <div class="p-6">
+                <div id="bookingsContent">
+                    <!-- Bookings will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-white rounded-2xl shadow-lg">
+            <div class="p-6 border-b">
+                <h3 class="text-xl font-semibold text-gray-900">Recent Activity</h3>
+            </div>
+            
+            <div class="p-6">
+                <div id="activityContent">
+                    <!-- Activity will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Recharge Modal -->
+    <div id="rechargeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full mx-4">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-gray-900">Add Money to Wallet</h3>
+                    <button onclick="closeRechargeModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <div class="mb-6">
+                    <h4 class="text-sm font-medium text-gray-700 mb-3">Quick Amounts</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="selectAmount(500)" class="amount-btn border-2 border-gray-200 hover:border-primary hover:bg-blue-50 px-4 py-3 rounded-lg font-medium transition-all">₹500</button>
+                        <button onclick="selectAmount(1000)" class="amount-btn border-2 border-gray-200 hover:border-primary hover:bg-blue-50 px-4 py-3 rounded-lg font-medium transition-all">₹1000</button>
+                        <button onclick="selectAmount(2000)" class="amount-btn border-2 border-gray-200 hover:border-primary hover:bg-blue-50 px-4 py-3 rounded-lg font-medium transition-all">₹2000</button>
+                        <button onclick="selectAmount(5000)" class="amount-btn border-2 border-gray-200 hover:border-primary hover:bg-blue-50 px-4 py-3 rounded-lg font-medium transition-all">₹5000</button>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label for="customAmount" class="block text-sm font-medium text-gray-700 mb-2">Or enter custom amount</label>
+                    <input type="number" id="customAmount" placeholder="Enter amount" min="100" max="50000"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                </div>
+                
+                <button onclick="initiateRecharge()" class="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-medium hover:shadow-lg transition-all">
+                    <i class="fas fa-credit-card mr-2"></i>Proceed to Payment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel Booking Modal -->
+    <div id="cancelModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full mx-4">
+            <div class="p-6 border-b">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-gray-900">Cancel Booking</h3>
+                    <button onclick="closeCancelModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <div class="mb-6">
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                        <h4 class="font-semibold text-yellow-800 mb-2">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>Cancellation Charges
+                        </h4>
+                        <div class="text-sm text-yellow-700" id="cancellationInfo">
+                            <!-- Cancellation info will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="cancelReason" class="block text-sm font-medium text-gray-700 mb-2">Reason for cancellation (Optional)</label>
+                        <textarea id="cancelReason" rows="3" placeholder="Please let us know why you're cancelling..."
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"></textarea>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-3">
+                    <button onclick="closeCancelModal()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-medium transition-colors">
+                        Keep Booking
+                    </button>
+                    <button onclick="confirmCancellation()" class="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-medium transition-colors">
+                        Cancel Booking
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-2xl font-gaming font-bold mb-4">🎮 GAMERSTOWN</h3>
+                    <p class="text-gray-400 mb-6">Your ultimate destination for gaming café bookings. Find, book, and play at the best gaming spots in your city.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-primary hover:bg-secondary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-primary hover:bg-secondary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="bg-primary hover:bg-secondary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="explore.html" class="text-gray-400 hover:text-white transition-colors">Explore Cafés</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-white transition-colors">Sign Up</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-white transition-colors">Login</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="help-center.html" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="contact-us.html" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="terms-of-service.html" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 GAMERSTOWN. All rights reserved.</p>
+            </div>
+        </div>
+        
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let selectedRechargeAmount = 0;
+        let currentBookingToCancel = null;
+        let activeTab = 'upcoming';
+        let userBookings = [];
+        let userWalletBalance = 0;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!window.GAMERSTOWN.auth.isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            await loadUserData();
+            await loadBookings();
+            setupTabs();
+            setupDropdown();
+        });
+
+        async function loadUserData() {
+            try {
+                const user = window.GAMERSTOWN.auth.getUserData();
+                if (user) {
+                    document.getElementById('userName').textContent = user.username || user.email.split('@')[0];
+                    document.getElementById('userNameHeader').textContent = user.username || user.email.split('@')[0];
+                    
+                    // Load wallet balance from localStorage or API
+                    userWalletBalance = parseInt(localStorage.getItem('walletBalance')) || user.walletBalance || 2500;
+                    document.getElementById('walletBalance').textContent = `₹${userWalletBalance.toLocaleString()}`;
+                }
+
+                // Load booking stats
+                const stats = {
+                    totalBookings: userBookings.length,
+                    upcomingBookings: userBookings.filter(b => b.status === 'upcoming' || b.status === 'confirmed').length,
+                    completedBookings: userBookings.filter(b => b.status === 'completed').length
+                };
+
+                document.getElementById('totalBookings').textContent = stats.totalBookings;
+                document.getElementById('upcomingBookings').textContent = stats.upcomingBookings;
+                document.getElementById('completedBookings').textContent = stats.completedBookings;
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        async function loadBookings() {
+            try {
+                // Load bookings from localStorage or API
+                const savedBookings = localStorage.getItem('userBookings');
+                if (savedBookings) {
+                    userBookings = JSON.parse(savedBookings);
+                } else {
+                    // Mock booking data
+                    userBookings = [
+                        {
+                            _id: '1',
+                            cafeName: 'Gaming Zone Pro',
+                            cafeAddress: 'MG Road, Bangalore',
+                            date: '2024-12-25',
+                            slot: '14:00-15:00',
+                            numberOfPlayers: 2,
+                            totalAmount: 300,
+                            status: 'upcoming',
+                            paymentStatus: 'paid',
+                            bookingTime: '2024-12-20T10:30:00Z',
+                            specialRequests: 'Window seat preferred'
+                        }
+                    ];
+                }
+
+                displayBookings();
+                loadRecentActivity();
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+                showError('Failed to load bookings');
+            }
+        }
+
+        function loadRecentActivity() {
+            const activityContent = document.getElementById('activityContent');
+            const recentBookings = userBookings.slice(0, 3);
+            
+            if (recentBookings.length === 0) {
+                activityContent.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-history text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-lg font-medium text-gray-600 mb-2">No recent activity</h3>
+                        <p class="text-gray-500">Your recent bookings will appear here</p>
+                    </div>
+                `;
+                return;
+            }
+
+            activityContent.innerHTML = recentBookings.map(booking => `
+                <div class="flex items-center justify-between p-4 border-b border-gray-100 last:border-b-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                            <i class="fas fa-gamepad text-white"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900">${booking.cafeName}</p>
+                            <p class="text-sm text-gray-500">${new Date(booking.date).toLocaleDateString()} at ${booking.slot}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-medium text-primary">₹${booking.totalAmount}</p>
+                        <p class="text-sm text-gray-500 capitalize">${booking.status}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setupTabs() {
+            document.querySelectorAll('.booking-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    document.querySelectorAll('.booking-tab').forEach(t => {
+                        t.classList.remove('active', 'border-primary', 'text-primary');
+                        t.classList.add('border-transparent', 'text-gray-500');
+                    });
+                    
+                    // Add active class to clicked tab
+                    tab.classList.add('active', 'border-primary', 'text-primary');
+                    tab.classList.remove('border-transparent', 'text-gray-500');
+                    
+                    activeTab = tab.dataset.tab;
+                    displayBookings();
+                });
+            });
+
+            // Set initial active tab
+            document.querySelector('.booking-tab[data-tab="upcoming"]').classList.add('border-primary', 'text-primary');
+            document.querySelector('.booking-tab[data-tab="upcoming"]').classList.remove('border-transparent', 'text-gray-500');
+        }
+
+        function displayBookings() {
+            const bookingsContent = document.getElementById('bookingsContent');
+            const filteredBookings = userBookings.filter(booking => {
+                if (activeTab === 'upcoming') {
+                    return booking.status === 'upcoming' || booking.status === 'confirmed';
+                }
+                return booking.status === activeTab;
+            });
+
+            if (filteredBookings.length === 0) {
+                bookingsContent.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-calendar-times text-4xl text-gray-300 mb-4"></i>
+                        <h3 class="text-lg font-medium text-gray-600 mb-2">No ${activeTab} bookings</h3>
+                        <p class="text-gray-500">Your ${activeTab} bookings will appear here</p>
+                    </div>
+                `;
+                return;
+            }
+
+            bookingsContent.innerHTML = filteredBookings.map(booking => createBookingCard(booking)).join('');
+        }
+
+        function createBookingCard(booking) {
+            const bookingDate = new Date(booking.date);
+            const now = new Date();
+            const isUpcoming = bookingDate > now;
+            const canCancel = isUpcoming && booking.status !== 'cancelled';
+            
+            const statusColors = {
+                upcoming: 'bg-blue-100 text-blue-800',
+                confirmed: 'bg-green-100 text-green-800',
+                completed: 'bg-gray-100 text-gray-800',
+                cancelled: 'bg-red-100 text-red-800'
+            };
+
+            return `
+                <div class="border border-gray-200 rounded-lg p-6 mb-4">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900">${booking.cafeName}</h4>
+                            <p class="text-gray-600">
+                                <i class="fas fa-map-marker-alt mr-2"></i>${booking.cafeAddress}
+                            </p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium ${statusColors[booking.status]}">
+                            ${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                        </span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Date</p>
+                            <p class="font-medium">${new Date(booking.date).toLocaleDateString()}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Time</p>
+                            <p class="font-medium">${booking.slot}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Players</p>
+                            <p class="font-medium">${booking.numberOfPlayers}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Amount</p>
+                            <p class="font-medium text-primary">₹${booking.totalAmount}</p>
+                        </div>
+                    </div>
+                    
+                    ${booking.specialRequests ? `
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-500">Special Requests</p>
+                            <p class="text-sm text-gray-700">${booking.specialRequests}</p>
+                        </div>
+                    ` : ''}
+                    
+                    ${booking.status === 'cancelled' && booking.refundAmount ? `
+                        <div class="mb-4 p-3 bg-yellow-50 rounded-lg">
+                            <p class="text-sm text-yellow-800">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Refund Amount: ₹${booking.refundAmount}
+                                ${booking.cancellationReason ? ` | Reason: ${booking.cancellationReason}` : ''}
+                            </p>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm text-gray-500">
+                            Booked on ${new Date(booking.bookingTime).toLocaleDateString()}
+                        </p>
+                        <div class="flex space-x-2">
+                            ${canCancel ? `
+                                <button onclick="openCancelModal('${booking._id}')" 
+                                        class="px-4 py-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors">
+                                    <i class="fas fa-times mr-1"></i>Cancel
+                                </button>
+                            ` : ''}
+                            ${booking.status === 'completed' ? `
+                                <button onclick="writeReview('${booking._id}')" 
+                                        class="px-4 py-2 text-primary hover:text-secondary hover:bg-blue-50 rounded-lg transition-colors">
+                                    <i class="fas fa-star mr-1"></i>Review
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setupDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            const menu = document.getElementById('dropdownMenu');
+            
+            dropdown.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!dropdown.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        }
+
+        function openRechargeModal() {
+            document.getElementById('rechargeModal').classList.remove('hidden');
+            document.getElementById('rechargeModal').classList.add('flex');
+        }
+
+        function closeRechargeModal() {
+            document.getElementById('rechargeModal').classList.add('hidden');
+            document.getElementById('rechargeModal').classList.remove('flex');
+            selectedRechargeAmount = 0;
+            document.getElementById('customAmount').value = '';
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-blue-50', 'text-primary');
+                btn.classList.add('border-gray-200');
+            });
+        }
+
+        function selectAmount(amount) {
+            selectedRechargeAmount = amount;
+            document.getElementById('customAmount').value = amount;
+            
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-blue-50', 'text-primary');
+                btn.classList.add('border-gray-200');
+            });
+            event.target.classList.add('border-primary', 'bg-blue-50', 'text-primary');
+            event.target.classList.remove('border-gray-200');
+        }
+
+        function initiateRecharge() {
+            const customAmount = document.getElementById('customAmount').value;
+            const amount = customAmount ? parseInt(customAmount) : selectedRechargeAmount;
+            
+            if (!amount || amount < 100) {
+                showError('Please enter a valid amount (minimum ₹100)');
+                return;
+            }
+            
+            if (amount > 50000) {
+                showError('Maximum recharge amount is ₹50,000');
+                return;
+            }
+
+            // Update wallet balance in localStorage and display
+            userWalletBalance += amount;
+            localStorage.setItem('walletBalance', userWalletBalance.toString());
+            document.getElementById('walletBalance').textContent = `₹${userWalletBalance.toLocaleString()}`;
+            
+            // Update user data in localStorage
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                user.walletBalance = userWalletBalance;
+                localStorage.setItem('user', JSON.stringify(user));
+            }
+            
+            showSuccess(`Payment of ₹${amount} successful! Wallet recharged.`);
+            closeRechargeModal();
+        }
+
+        function openCancelModal(bookingId) {
+            const booking = userBookings.find(b => b._id === bookingId);
+            if (!booking) return;
+
+            currentBookingToCancel = booking;
+            
+            const bookingDate = new Date(booking.date);
+            const now = new Date();
+            const hoursUntilBooking = (bookingDate - now) / (1000 * 60 * 60);
+            
+            let cancellationInfo = '';
+            let refundAmount = booking.totalAmount;
+            
+            if (hoursUntilBooking >= 2) {
+                cancellationInfo = `
+                    <p class="text-green-700 font-medium">✓ Free cancellation (more than 2 hours before)</p>
+                    <p class="text-sm">Full refund: ₹${booking.totalAmount}</p>
+                `;
+            } else if (hoursUntilBooking >= 1) {
+                refundAmount = booking.totalAmount * 0.5;
+                cancellationInfo = `
+                    <p class="text-yellow-700 font-medium">⚠ 50% cancellation charge applies</p>
+                    <p class="text-sm">Refund amount: ₹${refundAmount}</p>
+                    <p class="text-sm">Cancellation charge: ₹${booking.totalAmount - refundAmount}</p>
+                `;
+            } else {
+                refundAmount = 0;
+                cancellationInfo = `
+                    <p class="text-red-700 font-medium">✗ No refund (less than 1 hour before)</p>
+                    <p class="text-sm">Cancellation charge: ₹${booking.totalAmount}</p>
+                `;
+            }
+            
+            document.getElementById('cancellationInfo').innerHTML = cancellationInfo;
+            document.getElementById('cancelModal').classList.remove('hidden');
+            document.getElementById('cancelModal').classList.add('flex');
+        }
+
+        function closeCancelModal() {
+            document.getElementById('cancelModal').classList.add('hidden');
+            document.getElementById('cancelModal').classList.remove('flex');
+            currentBookingToCancel = null;
+            document.getElementById('cancelReason').value = '';
+        }
+
+        async function confirmCancellation() {
+            if (!currentBookingToCancel) return;
+
+            try {
+                const reason = document.getElementById('cancelReason').value;
+                
+                // Calculate refund
+                const bookingDate = new Date(currentBookingToCancel.date);
+                const now = new Date();
+                const hoursUntilBooking = (bookingDate - now) / (1000 * 60 * 60);
+                
+                let refundAmount = currentBookingToCancel.totalAmount;
+                if (hoursUntilBooking < 2 && hoursUntilBooking >= 1) {
+                    refundAmount = currentBookingToCancel.totalAmount * 0.5;
+                } else if (hoursUntilBooking < 1) {
+                    refundAmount = 0;
+                }
+
+                // Update booking status
+                const bookingIndex = userBookings.findIndex(b => b._id === currentBookingToCancel._id);
+                if (bookingIndex !== -1) {
+                    userBookings[bookingIndex].status = 'cancelled';
+                    userBookings[bookingIndex].cancellationReason = reason;
+                    userBookings[bookingIndex].refundAmount = refundAmount;
+                    
+                    // Save to localStorage
+                    localStorage.setItem('userBookings', JSON.stringify(userBookings));
+                }
+
+                // Update wallet if refund applicable
+                if (refundAmount > 0) {
+                    userWalletBalance += refundAmount;
+                    localStorage.setItem('walletBalance', userWalletBalance.toString());
+                    document.getElementById('walletBalance').textContent = `₹${userWalletBalance.toLocaleString()}`;
+                    
+                    // Update user data
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    if (user) {
+                        user.walletBalance = userWalletBalance;
+                        localStorage.setItem('user', JSON.stringify(user));
+                    }
+                }
+
+                showSuccess(`Booking cancelled successfully. ${refundAmount > 0 ? `₹${refundAmount} refunded to wallet.` : 'No refund applicable.'}`);
+                
+                closeCancelModal();
+                displayBookings();
+                loadRecentActivity();
+                
+                // Update stats
+                const upcomingCount = parseInt(document.getElementById('upcomingBookings').textContent);
+                document.getElementById('upcomingBookings').textContent = Math.max(0, upcomingCount - 1);
+                
+            } catch (error) {
+                console.error('Cancellation error:', error);
+                showError('Failed to cancel booking. Please try again.');
+            }
+        }
+
+        function writeReview(bookingId) {
+            // Redirect to review page or open review modal
+            showSuccess('Review feature coming soon!');
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('walletBalance');
+            localStorage.removeItem('userBookings');
+            window.location.href = 'index.html';
+        }
+
+        // Custom amount input handler
+        document.addEventListener('DOMContentLoaded', () => {
+            const customAmountInput = document.getElementById('customAmount');
+            if (customAmountInput) {
+                customAmountInput.addEventListener('input', (e) => {
+                    selectedRechargeAmount = parseInt(e.target.value) || 0;
+                    document.querySelectorAll('.amount-btn').forEach(btn => {
+                        btn.classList.remove('border-primary', 'bg-blue-50', 'text-primary');
+                        btn.classList.add('border-gray-200');
+                    });
+                });
+            }
+        });
+
+        function showSuccess(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2 max-w-sm';
+            notification.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <span class="flex-1">${message}</span>
+                <button onclick="this.parentElement.remove()" class="ml-2 hover:bg-white/20 rounded p-1">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 5000);
+        }
+
+        function showError(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2 max-w-sm';
+            notification.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                <span class="flex-1">${message}</span>
+                <button onclick="this.parentElement.remove()" class="ml-2 hover:bg-white/20 rounded p-1">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

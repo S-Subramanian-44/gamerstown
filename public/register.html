@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - GAMERSTOWN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#667eea',
+                        secondary: '#764ba2',
+                        accent: '#f093fb',
+                    },
+                    fontFamily: {
+                        'gaming': ['Orbitron', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-accent via-primary to-secondary flex items-center justify-center p-4">
+    <div class="max-w-md w-full">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <a href="index.html" class="text-white text-3xl font-gaming font-bold">
+                🎮 GAMERSTOWN
+            </a>
+        </div>
+
+        <!-- Register Card -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Join GAMERSTOWN</h2>
+                <p class="text-gray-600">Create your account to start gaming</p>
+            </div>
+
+            <!-- User Type Selector -->
+            <div class="flex bg-gray-100 rounded-xl p-1 mb-6">
+                <button class="flex-1 py-3 px-4 rounded-lg font-medium transition-all user-type-btn active bg-primary text-white" data-type="user">
+                    <i class="fas fa-user mr-2"></i>Gamer
+                </button>
+            </div>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                    <div class="relative">
+                        <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="username" name="username" required
+                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <div class="relative">
+                        <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="email" id="email" name="email" required
+                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                </div>
+
+                <div id="dobGroup">
+                    <label for="dob" class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                    <div class="relative">
+                        <i class="fas fa-calendar absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="date" id="dob" name="dob" required
+                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <div class="relative">
+                        <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="password" id="password" name="password" required minlength="6"
+                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                    <div class="relative">
+                        <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required
+                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 rounded-lg font-medium hover:shadow-lg transition-all transform hover:scale-105">
+                    <i class="fas fa-user-plus mr-2"></i>Create Account
+                </button>
+            </form>
+
+            <div class="mt-8 text-center">
+                <p class="text-gray-600">Already have an account? 
+                    <a href="login.html" class="text-primary hover:text-secondary font-medium">Sign in here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let selectedUserType = 'user';
+
+        // User type selector
+        document.querySelectorAll('.user-type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.user-type-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-primary', 'text-white');
+                    b.classList.add('text-gray-600');
+                });
+                btn.classList.add('active', 'bg-primary', 'text-white');
+                btn.classList.remove('text-gray-600');
+                selectedUserType = btn.dataset.type;
+            });
+        });
+
+        // Register form
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirmPassword');
+
+            if (password !== confirmPassword) {
+                window.GAMERSTOWN.showMessage('Passwords do not match', 'danger');
+                return;
+            }
+
+            // Check age requirement (e.g., 13 years old)
+            const dob = new Date(formData.get('dob'));
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            
+            if (age < 13) {
+                window.GAMERSTOWN.showMessage('You must be at least 13 years old to register', 'danger');
+                return;
+            }
+
+            const registerData = {
+                username: formData.get('username'),
+                email: formData.get('email'),
+                dob: formData.get('dob'),
+                password: password,
+                userType: selectedUserType
+            };
+
+            try {
+                const response = await window.GAMERSTOWN.apiClient.register(registerData);
+                
+                if (response.success) {
+                    window.GAMERSTOWN.showMessage('Registration successful! Please login.', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    window.GAMERSTOWN.showMessage(response.message || 'Registration failed', 'danger');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                window.GAMERSTOWN.handleApiError(error, 'Registration failed. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

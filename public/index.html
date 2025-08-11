@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMERSTOWN - Find Your Gaming Paradise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#667eea',
+                        secondary: '#764ba2',
+                        accent: '#f093fb',
+                        dark: '#1a202c',
+                    },
+                    fontFamily: {
+                        'gaming': ['Orbitron', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-primary to-secondary shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-white text-2xl font-gaming font-bold">
+                        🎮 GAMERSTOWN
+                    </h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+                        <a href="explore.html" class="text-white hover:text-gray-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Explore</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4" id="authButtons">
+                    <a href="login.html" class="text-white border border-white px-4 py-2 rounded-lg hover:bg-white hover:text-primary transition-all">Login</a>
+                    <a href="register.html" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-100 transition-all font-medium">Sign Up</a>
+                </div>
+                <div class="hidden items-center space-x-4" id="userMenu">
+                    <span class="text-white" id="userName"></span>
+                    <div class="relative">
+                        <button class="text-white hover:text-gray-300" id="userDropdown" onclick="window.location.href='user-dashboard.html'">
+                            <i class="fas fa-user-circle text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-accent via-primary to-secondary min-h-screen flex items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="text-white">
+                    <h1 class="text-5xl lg:text-7xl font-gaming font-black mb-6 leading-tight">
+                        Find Your Perfect
+                        <span class="text-yellow-300">Gaming Spot</span>
+                    </h1>
+                    <p class="text-xl mb-8 text-gray-100 leading-relaxed">
+                        Discover and book gaming cafés in your city. Play with friends, compete online, and level up your gaming experience!
+                    </p>
+                    
+                    <!-- Search Container -->
+                    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-6 mb-8">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="relative">
+                                <i class="fas fa-map-marker-alt absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700 z-10"></i>
+                                <select id="citySelect" class="w-full pl-10 pr-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-primary text-gray-700 bg-white">
+                                    <option value="">Select City</option>
+                                </select>
+                            </div>
+                            <div class="relative">
+                                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700 z-10"></i>
+                                <input type="text" id="searchInput" placeholder="Search gaming cafés..." 
+                                       class="w-full pl-10 pr-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-primary text-gray-700 bg-white">
+                            </div>
+                            <button onclick="searchCafes()" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-all transform hover:scale-105">
+                                <i class="fas fa-search mr-2"></i>Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-primary to-secondary rounded-3xl transform rotate-6"></div>
+                    <img src="/images/gaming-setup.jpg" 
+                         alt="Gaming Setup" class="relative rounded-3xl shadow-2xl w-full h-96 object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-gaming font-bold text-gray-900 mb-4">Why Choose GAMERSTOWN?</h2>
+                <p class="text-xl text-gray-600">Experience gaming like never before</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="group bg-gradient-to-br from-blue-50 to-indigo-100 p-8 rounded-2xl hover:shadow-xl transition-all transform hover:-translate-y-2">
+                    <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-gamepad text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Latest Gaming Setups</h3>
+                    <p class="text-gray-600">High-end PCs, PS5, Xbox, and VR setups for the ultimate gaming experience</p>
+                </div>
+                
+                <div class="group bg-gradient-to-br from-green-50 to-emerald-100 p-8 rounded-2xl hover:shadow-xl transition-all transform hover:-translate-y-2">
+                    <div class="bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-calendar-check text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Easy Booking</h3>
+                    <p class="text-gray-600">Book your gaming slots in advance and never wait in queues again</p>
+                </div>
+                
+                <div class="group bg-gradient-to-br from-purple-50 to-violet-100 p-8 rounded-2xl hover:shadow-xl transition-all transform hover:-translate-y-2">
+                    <div class="bg-purple-500 text-white w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-wallet text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Digital Wallet</h3>
+                    <p class="text-gray-600">Secure payments with our integrated wallet system and instant refunds</p>
+                </div>
+                
+                <div class="group bg-gradient-to-br from-yellow-50 to-orange-100 p-8 rounded-2xl hover:shadow-xl transition-all transform hover:-translate-y-2">
+                    <div class="bg-yellow-500 text-white w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-star text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Verified Reviews</h3>
+                    <p class="text-gray-600">Read authentic reviews from fellow gamers to make informed choices</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-2xl font-gaming font-bold mb-4">🎮 GAMERSTOWN</h3>
+                    <p class="text-gray-400 mb-6">Your ultimate destination for gaming café bookings. Find, book, and play at the best gaming spots in your city.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-primary hover:bg-secondary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-primary hover:bg-secondary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="bg-primary hover:bg-secondary w-10 h-10 rounded-full flex items-center justify-center transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="explore.html" class="text-gray-400 hover:text-white transition-colors">Explore Cafés</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-white transition-colors">Sign Up</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-white transition-colors">Login</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="help-center.html" class="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="contact-us.html" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="terms-of-service.html" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 GAMERSTOWN. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+// Check authentication status and update navigation
+function updateNavigation() {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    const authButtons = document.getElementById('authButtons');
+    const userMenu = document.getElementById('userMenu');
+    const userName = document.getElementById('userName');
+
+    if (token && user) {
+        const userData = JSON.parse(user);
+        authButtons.style.display = 'none';
+        userMenu.style.display = 'flex';
+        // Display username instead of email
+        userName.textContent = userData.username || userData.email.split('@')[0];
+    } else {
+        authButtons.style.display = 'flex';
+        userMenu.style.display = 'none';
+    }
+}
+
+function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = 'index.html';
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    updateNavigation();
+    loadCities();
+});
+
+// Load cities for dropdown
+async function loadCities() {
+    const citySelect = document.getElementById('citySelect');
+    const cities = ['Bangalore', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Pune'];
+    
+    cities.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city.toLowerCase();
+        option.textContent = city;
+        citySelect.appendChild(option);
+    });
+}
+
+// Search functionality
+function searchCafes() {
+    const city = document.getElementById('citySelect').value;
+    const search = document.getElementById('searchInput').value;
+    
+    const params = new URLSearchParams();
+    if (city) params.append('city', city);
+    if (search) params.append('search', search);
+    
+    window.location.href = `explore.html?${params.toString()}`;
+}
+
+// Enter key search
+document.getElementById('searchInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        searchCafes();
+    }
+});
+</script>
+</body>
+</html>
